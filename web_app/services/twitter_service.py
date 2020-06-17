@@ -26,5 +26,5 @@ if __name__ == "__main__":
     print("USER", user)
     print(user.screen_name)
     print(user.name)
-    print(user_timeline("elonmusk"))
+    #print(user_timeline("elonmusk"))
     print(user.followers_count)

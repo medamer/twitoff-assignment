@@ -2,18 +2,27 @@
 
 from flask import Blueprint, render_template, jsonify
 from web_app.models import db, User, Tweet
-from web_app.services.twitter_service import twitter_api  #twitter_api_client
+from web_app.services.twitter_service import twitter_api
 from web_app.services.basilica_service import basilica_api_client
 
 twitter_routes = Blueprint("twitter_routes", __name__)
 
+@twitter_routes.route("/user_page")
+def user_page():
+    return "user page"
+
 @twitter_routes.route("/users/<screen_name>")
-def fetch_user(screen_name=None):
+def get_user(screen_name=None):
     print(screen_name)
 
-    api = twitter_api    #twitter_api_client()
+    api = twitter_api()
+    user = api.get_user("elonmusk")
+    print("USER", user)
+    print(user.screen_name)
+    print(user.name)
 
-    twitter_user = api.get_user(screen_name)
+    
+    #twitter_user = twitter_api.get_user(screen_name)
     #tweets = api.user_timeline(screen_name, tweet_mode="extended", count=150, exclude_replies=True, include_rts=False)
     #print("Tweets Count: ", len(tweets))
     #return jsonify({"user": user._json, "tweets": [s._json for s in statuses]})
@@ -31,7 +40,7 @@ def fetch_user(screen_name=None):
     db.session.commit()
     
     # Get tweets:
-    tweets = api.user_timeline(screen_name, tweet_mode="extended", count=150, exclude_replies=True, include_rts=False)
+    tweets = twitter_api.user_timeline(screen_name, tweet_mode="extended", count=10, exclude_replies=True, include_rts=False)
 
     all_tweet_texts = [status.full_text for status in tweets]
     embeddings = list(basilica_api_client.embed_sentences(all_tweet_texts, model="twitter"))
