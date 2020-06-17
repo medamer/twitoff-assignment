@@ -12,17 +12,17 @@ def user_page():
     return "user page"
 
 @twitter_routes.route("/users/<screen_name>")
-def get_user(screen_name=None):
+def fetch_user(screen_name=None):
     print(screen_name)
 
     api = twitter_api()
-    user = api.get_user("elonmusk")
-    print("USER", user)
-    print(user.screen_name)
-    print(user.name)
+    # user = api.get_user("elonmusk")
+    # print("USER", user)
+    # print(user.screen_name)
+    # print(user.name)
 
     
-    #twitter_user = twitter_api.get_user(screen_name)
+    twitter_user = api.get_user(screen_name)
     #tweets = api.user_timeline(screen_name, tweet_mode="extended", count=150, exclude_replies=True, include_rts=False)
     #print("Tweets Count: ", len(tweets))
     #return jsonify({"user": user._json, "tweets": [s._json for s in statuses]})
@@ -40,10 +40,11 @@ def get_user(screen_name=None):
     db.session.commit()
     
     # Get tweets:
-    tweets = twitter_api.user_timeline(screen_name, tweet_mode="extended", count=10, exclude_replies=True, include_rts=False)
+    basilica_api = basilica_api_client()
+    tweets = api.user_timeline(screen_name, tweet_mode="extended", count=150, exclude_replies=True, include_rts=False)
 
     all_tweet_texts = [status.full_text for status in tweets]
-    embeddings = list(basilica_api_client.embed_sentences(all_tweet_texts, model="twitter"))
+    embeddings = list(basilica_api.embed_sentences(all_tweet_texts, model="twitter"))
     print("Number Of Embeddings", len(embeddings))
 
     for index, status in enumerate(tweets):
@@ -51,7 +52,7 @@ def get_user(screen_name=None):
         print(status.full_text)
         print("----")
 
-        embeddings = embeddings[index]
+        embedding = embeddings[index]
 
         #embedding = basilica_api_client.embed_sentence(status.full_text, model="twitter") 
 
@@ -62,7 +63,7 @@ def get_user(screen_name=None):
         db_tweet.full_text = status.full_text
 
         #embedding = embeddings[counter]
-        print(len(embedding))
+        print(len(embeddings))
         db_tweet.embedding = embedding
         db.session.add(db_tweet)
         
