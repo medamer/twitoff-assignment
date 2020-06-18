@@ -16,4 +16,4 @@ def hello():
 
 @home_routes.route("/about")
 def about():
-    return "About me"
+    return "About me: Mohamed edamer"
