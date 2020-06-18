@@ -9,6 +9,10 @@ home_routes = Blueprint("home_routes", __name__)
 def index():
     return render_template("prediction_form.html")
 
+@home_routes.route("/add_tweets")
+def add_tweets():
+    return render_template("add_tweets.html")
+
 @home_routes.route("/hello")
 def hello():
     x = 2 + 2
