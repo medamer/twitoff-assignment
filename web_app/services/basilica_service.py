@@ -1,6 +1,6 @@
 # web_app/services/basilica_service.py
 
-import basilica
+from basilica import Connection
 import os
 from dotenv import load_dotenv
 
@@ -8,10 +8,11 @@ load_dotenv()
 
 API_KEY = os.getenv("BASILICA_API_KEY")
 
+connection = Connection(API_KEY)
 # Function to return connection:
 def basilica_api_client():
-    connection = basilica.Connection(API_KEY)
-    print(type(connection)) #> <class 'basilica.Connection'>
+    connection = Connection(API_KEY)
+    print(type(connection)) 
     return connection
 
 if __name__ == "__main__":

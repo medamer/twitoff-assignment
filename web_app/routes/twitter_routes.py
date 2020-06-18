@@ -16,16 +16,9 @@ def fetch_user(screen_name=None):
     print(screen_name)
 
     api = twitter_api()
-    # user = api.get_user("elonmusk")
-    # print("USER", user)
-    # print(user.screen_name)
-    # print(user.name)
 
-    
     twitter_user = api.get_user(screen_name)
-    #tweets = api.user_timeline(screen_name, tweet_mode="extended", count=150, exclude_replies=True, include_rts=False)
-    #print("Tweets Count: ", len(tweets))
-    #return jsonify({"user": user._json, "tweets": [s._json for s in statuses]})
+
 
     # Get user from database if exists, if not initialaize new one:
     db_user = User.query.get(twitter_user.id) or User(id=twitter_user.id)
@@ -53,8 +46,6 @@ def fetch_user(screen_name=None):
         print("----")
 
         embedding = embeddings[index]
-
-        #embedding = basilica_api_client.embed_sentence(status.full_text, model="twitter") 
 
         # get existing tweet from the db or initialize a new one:
         db_tweet = Tweet.query.get(status.id) or Tweet(id=status.id)
