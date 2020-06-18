@@ -34,7 +34,7 @@ def fetch_user(screen_name=None):
     
     # Get tweets:
     basilica_api = basilica_api_client()
-    tweets = api.user_timeline(screen_name, tweet_mode="extended", count=150, exclude_replies=True, include_rts=False)
+    tweets = api.user_timeline(screen_name, tweet_mode="extended", count=150) #, exclude_replies=True, include_rts=False)
 
     all_tweet_texts = [status.full_text for status in tweets]
     embeddings = list(basilica_api.embed_sentences(all_tweet_texts, model="twitter"))
